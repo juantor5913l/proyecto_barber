@@ -23,11 +23,11 @@ app.config.from_object(Config)
 
 
 #Importar el modulo 
-#from app.administrador import admin_blueprint
-#from app.cliente import cliente_blueprint
+from app.administrador import admin_blueprint
+from app.cliente import cliente_blueprint
 #Vincular submodulos del proyecto
-#app.register_blueprint(admin_blueprint)
-#app.register_blueprint(cliente_blueprint)
+app.register_blueprint(admin_blueprint)
+app.register_blueprint(cliente_blueprint)
 #crear el objeto de modelos:
 
 
@@ -40,7 +40,7 @@ db = SQLAlchemy(app)
 #crear el obejeto de migracion 
 migrate=Migrate(app,db)
 
-from .models import Cita, Cliente, Barbero
+from .models import Cita
 @app.route('/')
 def index():
     return render_template('index.html')
