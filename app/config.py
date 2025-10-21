@@ -1,6 +1,6 @@
 class Config:
     #definir 'cadena de conexion'(connectionString)
-    SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/base_barberia'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/base_barberia1'
     SQLALCHEMY_TRACK_NOTIFICATIONS = False
     SECRET_KEY = 'PGLO_MANITO'
     MAIL_SERVER = 'smtp.gmail.com'  # Reemplaza con tu servidor de correo
