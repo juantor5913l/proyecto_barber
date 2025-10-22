@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Fronesis Studio | Reserva tu cita</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FullCalendar -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #F8F8F8;
+      color: #2B2B2B;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 1000px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .info-section {
+      flex: 1;
+      padding: 40px;
+      border-right: 1px solid #E5E5E5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: #FFFFFF;
+    }
+
+    .info-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #C6A664;
+      margin-bottom: 10px;
+    }
+
+    .info-section p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .info-section strong {
+      color: #2B2B2B;
+    }
+
+    .info-section .horario {
+      background-color: #F5F5F5;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .calendar-section {
+      flex: 1.3;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .calendar-section h3 {
+      font-weight: 500;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    #calendar {
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+
+    .fc-toolbar-title {
+      color: #2B2B2B !important;
+      font-family: 'Playfair Display', serif !important;
+    }
+
+    .fc-button {
+      background-color: #C6A664 !important;
+      border: none !important;
+      color: #fff !important;
+      border-radius: 6px !important;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .fc-button:hover {
+      background-color: #b79a55 !important;
+    }
+
+    /* --- CALENDARIO ULTRA MINIMALISTA --- */
+    #calendar .fc-daygrid-day,
+    #calendar .fc-daygrid-day-frame,
+    #calendar .fc-daygrid-body,
+    #calendar .fc-col-header {
+      border: none !important;       /* quitar bordes */
+      background-color: transparent !important;
+      padding: 0;
+    }
+
+    /* Día circular */
+    #calendar .fc-daygrid-day-number {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 36px;
+      height: 36px;
+      margin: 0 auto;
+      font-weight: 500;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    /* Días disponibles */
+    .fc-daygrid-day.available .fc-daygrid-day-number {
+      color: #155724;
+    }
+
+    /* Días no disponibles: “fantasma” */
+    .fc-daygrid-day.unavailable .fc-daygrid-day-number {
+      background-color: rgba(200,200,200,0.1);
+      color: rgba(0,0,0,0.15);
+      cursor: default;
+    }
+
+    /* Día actual dorado */
+    .fc-daygrid-day.today .fc-daygrid-day-number {
+      background-color: #FFD700;
+      color: #000;
+      font-weight: 600;
+    }
+
+    /* Hover solo en días disponibles */
+    #calendar .fc-daygrid-day:hover:not(.unavailable) .fc-daygrid-day-number {
+      background-color: rgba(198,166,100,0.2);
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      color: #999;
+      font-size: 0.85rem;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        flex-direction: column;
+        width: 95%;
+      }
+      .info-section, .calendar-section {
+        border-right: none;
+        padding: 25px;
+      }
+      .calendar-section {
+        border-top: 1px solid #E5E5E5;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="info-section">
+      <h2>FRONESIS STUDIO</h2>
+      <p><strong>Reserva tu cita</strong> en nuestro estudio premium.  
+      Servicio exclusivo y personalizado para cada cliente.</p>
+
+      <div class="horario">
+        <strong>Horarios de atención</strong><br>
+        Lunes a Domingo<br>
+        9:00 a.m. - 8:00 p.m.<br>
+        <em>De 1:00 p.m. a 3:00 p.m. no hay servicio.</em>
+      </div>
+
+      <footer>
+        © 2025 Fronesis Studio | Barbería Premium
+      </footer>
+    </div>
+
+    <div class="calendar-section">
+      <h3>Selecciona una fecha y hora</h3>
+      <div id="calendar"></div>
+
+      <form id="fechaForm" method="POST" action="{{ url_for('cliente.seleccionar_fecha') }}">
+        <input type="hidden" name="fecha" id="fechaInput">
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      const res = await fetch('/cliente/dias_restringidos');
+      const fechasRestringidas = await res.json();
+
+      const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        locale: 'es',
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        contentHeight: 'auto',
+        expandRows: true,
+        dateClick: function(info) {
+          const fecha = info.dateStr;
+          if (fechasRestringidas.includes(fecha)) {
+            alert('🚫 Día no disponible.');
+          } else {
+            document.getElementById('fechaInput').value = fecha;
+            document.getElementById('fechaForm').submit();
+          }
+        },
+        dayCellDidMount: function(arg) {
+          const f = arg.date.toISOString().split('T')[0];
+          const today = new Date().toISOString().split('T')[0];
+
+          if (f === today) {
+            arg.el.classList.add('today');
+          } else if (fechasRestringidas.includes(f)) {
+            arg.el.classList.add('unavailable');
+          } else {
+            arg.el.classList.add('available');
+          }
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+</html>

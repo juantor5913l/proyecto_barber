@@ -40,8 +40,8 @@ db = SQLAlchemy(app)
 #crear el obejeto de migracion 
 migrate=Migrate(app,db)
 
-from .models import Cita
+from .models import Cita, DiaRestringido
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('cliente/calendario.html')
     

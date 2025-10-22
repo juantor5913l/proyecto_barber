@@ -19,5 +19,6 @@ class DiaRestringido(db.Model):
     __tablename__ = 'dia_restringido'
 
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.Date, nullable=False, unique=True)
+    fecha = db.Column(db.Date, nullable=False)
+    hora = db.Column(db.Time, nullable=False)
 

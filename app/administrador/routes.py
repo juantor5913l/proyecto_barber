@@ -1,4 +1,5 @@
-from flask import render_template, request, redirect, url_for, flash
+from datetime import datetime
+from flask import render_template, request, redirect, session, url_for, flash
 import app
 from . import admin_blueprint
 
@@ -8,44 +9,53 @@ from . import admin_blueprint
 def listar_cortes():
     from app import db, models  # Importación local para evitar circularidad
     lista_cortes = db.session.query(models.Cita).all()
-    return render_template('listar_cortes.html', lista_cortes=lista_cortes)
+    return render_template('administrador/listar_cortes.html', lista_cortes=lista_cortes)
 
-@admin_blueprint.route('/dias_restringidos', methods=['GET', 'POST'])
-def gestionar_dias_restringidos():
-    from app import db, models
+@admin_blueprint.route('/dias_restringidos/fecha', methods=['GET', 'POST'])
+def seleccionar_fecha():
     if request.method == 'POST':
-        fecha = request.form.get('fecha')
-        motivo = request.form.get('motivo')
+        fecha_str = request.form['fecha']
+        fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d').date()
 
-        if not fecha:
-            flash("Debes seleccionar una fecha.", "danger")
-            return redirect(url_for('administrador.gestionar_dias_restringidos'))
-
-        fecha_dt = datetime.strptime(fecha, '%Y-%m-%d').date()
-
-        # Verificar si ya existe
-        existente = DiaRestringido.query.filter_by(fecha=fecha_dt).first()
-        if existente:
-            flash("Esa fecha ya está restringida.", "warning")
-        else:
-            nuevo_dia = DiaRestringido(fecha=fecha_dt, motivo=motivo)
-            db.session.add(nuevo_dia)
-            db.session.commit()
-            flash("Día restringido agregado correctamente.", "success")
-
-        return redirect(url_for('administrador.gestionar_dias_restringidos'))
-
-    dias = app.db.session.query(models.DiaRestringido.fecha.asc()).all()
-    return render_template('admin/dias_restringidos.html', dias=dias)
+        # Guardamos temporalmente la fecha en sesión
+        session['fecha_seleccionada'] = fecha_str
+        return redirect(url_for('administrador.seleccionar_hora'))
 
 
-# ------------------------------------------------
-# ❌ Eliminar día restringido
-# ------------------------------------------------
-@admin_blueprint.route('/dias_restringidos/eliminar/<int:id>', methods=['POST'])
-def eliminar_dia_restringido(id):
-    dia = DiaRestringido.query.get_or_404(id)
-    db.session.delete(dia)
-    db.session.commit()
-    flash("Día restringido eliminado correctamente.", "success")
-    return redirect(url_for('administrador.gestionar_dias_restringidos'))
+    return render_template('administrador/seleccionar_fecha.html')
+
+@admin_blueprint.route('/dias_restringidos/hora', methods=['GET', 'POST'])
+
+def seleccionar_hora():
+    
+
+    fecha_str = session.get('fecha_seleccionada')
+    if not fecha_str:
+        flash("Primero selecciona una fecha.")
+        return ("selecciona hora gay")
+
+    if request.method == 'POST':
+        hora_str = request.form['hora']
+
+
+        fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+        hora_dt = datetime.strptime(hora_str, '%H:%M').time()
+
+        dia_restringido = app.models.DiaRestringido(fecha=fecha_dt)
+        dia_restringido.hora = hora_dt  # si el modelo tiene el campo
+        app.db.session.add(dia_restringido)
+        app.db.session.commit()
+
+        todas_las_horas = [
+        '08:00', '09:00', '10:00', '11:00',
+        '13:00', '14:00', '15:00', '16:00', '17:00'
+    ]
+        horas_string_cruda = str(todas_las_horas)
+
+        session.pop('fecha_seleccionada', None)
+        flash('Día restringido guardado correctamente.')
+        print("Día restringido guardado:", fecha_str, hora_str)
+        return ("dia restringido guardado")
+
+
+    return render_template('administrador/seleccionar_hora.html', fecha=fecha_str)

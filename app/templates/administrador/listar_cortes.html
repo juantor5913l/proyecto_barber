@@ -48,9 +48,10 @@
                         <td>{{ cita.hora.strftime('%H:%M') if cita.hora else '-' }}</td>
                         <td>
                             {% if cita.telefono %}
-                            <a href="https://wa.me/{{ cita.telefono|replace(' ', '')|replace('+', '') }}" target="_blank" class="btn btn-sm btn-whatsapp">
+                            <a href="https://wa.me/57{{ cita.telefono|replace(' ', '')|replace('+', '') }}" target="_blank" class="btn btn-sm btn-whatsapp">
                                 <i class="bi bi-whatsapp"></i> WhatsApp
                             </a>
+                            
                             {% else %}
                             <span class="text-muted">Sin número</span>
                             {% endif %}
